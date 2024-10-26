@@ -15,5 +15,10 @@
 	<version>0.0.0</version>
 	<name>booking</name>
 	<description>Backend User Service for Vietnam Sea</description>
-    
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
 </project>

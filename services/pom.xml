@@ -18,15 +18,25 @@
 	<description>Backend monorepo for Vietnam Sea</description>
 
 	<packaging>pom</packaging>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+			<version>4.1.2</version>
 		</dependency>
 	</dependencies>
+	
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>3.2.9</version>
+			</dependency>
 			<dependency>
 				<groupId>io.grpc</groupId>
 				<artifactId>grpc-netty-shaded</artifactId>
@@ -56,6 +66,7 @@
 		<module>user</module>
 		<module>booking</module>
 		<module>payment</module>
+		<module>gateway</module>
 	</modules>
 
 </project>
