@@ -14,6 +14,6 @@ spring:
         health-check-path: /actuator/health
 
 server:
-  port: ${PORT:8081}
+  port: ${PORT:8082}
 
 
