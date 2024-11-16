@@ -12,6 +12,15 @@ spring:
         health-check-interval: 10s
         instance-id: authentication-service
         health-check-path: /actuator/health
+  data:
+    mongodb:
+      database: ${MONGO_DB:vns}
+      host: ${MONGO_HOST:localhost}
+      username: ${MONGO_USER:root} 
+      password: ${MONGO_PASS:example}
+      port: 27017
+      authentication-database: admin
+      auto-index-creation: true
 
 server:
   port: ${PORT:8081}
