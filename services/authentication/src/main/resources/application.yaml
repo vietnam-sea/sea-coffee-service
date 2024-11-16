@@ -25,4 +25,16 @@ spring:
 server:
   port: ${PORT:8081}
 
+grpc:
+  server:
+    port: ${GRPC_PORT:9081}
 
+
+token:
+  jwt:
+    access-token:
+      key: ${JWT_ACCESS_KEY}
+      ex-time: ${JWT_ACCESS_EX}
+    refresh-token:
+      key: ${JWT_REFRESH_KEY}
+      ex-time: ${JWT_REFRESH_EX}

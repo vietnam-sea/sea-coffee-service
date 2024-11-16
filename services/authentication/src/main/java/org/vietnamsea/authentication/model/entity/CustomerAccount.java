@@ -17,7 +17,6 @@ import lombok.Data;
 @Builder
 public class CustomerAccount {
     @Id
-    @Indexed(unique = true)
     private BigDecimal id;
     @Indexed(unique = true)
     private String username;
