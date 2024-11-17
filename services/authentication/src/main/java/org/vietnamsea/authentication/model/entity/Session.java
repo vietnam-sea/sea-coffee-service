@@ -18,5 +18,5 @@ import lombok.Setter;
 public class Session extends BaseNoSQLEntity {
     private String userId;
     private String ipAddress;
-    private String userAgent;    
+    private String userAgent;
 }

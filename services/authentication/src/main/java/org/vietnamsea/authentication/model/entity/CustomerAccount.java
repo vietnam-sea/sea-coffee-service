@@ -23,6 +23,7 @@ import lombok.Setter;
 @Document(collection = "customer_accounts")
 public class CustomerAccount extends BaseNoSQLEntity {
     @Indexed(unique = true)
+    @Field(name = "username", write = Write.ALWAYS)
     private String username;
     @Field(name = "hash_password", write = Write.ALWAYS)
     private String hashPassword;
@@ -30,9 +31,12 @@ public class CustomerAccount extends BaseNoSQLEntity {
     private List<String> avatars;
     @Field(name = "roles", write = Write.ALWAYS)
     private List<String> roles;
+    @Field(name = "google_id")
     private String googleId;
-    @Field(name = "active")
+    @Field(name = "is_active", write = Write.ALWAYS)
     private boolean isActive;
-    @Field(name = "verify")
+    @Field(name = "is_verified", write = Write.ALWAYS)
     private boolean isVerified;
+    @Field(name = "is_locked", write = Write.ALWAYS)
+    private boolean isLocked;
 }

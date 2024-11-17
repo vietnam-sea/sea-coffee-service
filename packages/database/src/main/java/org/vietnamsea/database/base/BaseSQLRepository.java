@@ -1,11 +1,6 @@
 package org.vietnamsea.database.base;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import jakarta.persistence.criteria.Predicate;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 @NoRepositoryBean
 public interface BaseSQLRepository <T extends BaseSQLEntity, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
@@ -29,7 +27,7 @@ public interface BaseSQLRepository <T extends BaseSQLEntity, ID extends Serializ
                             "%" + item.getValue().toLowerCase() + "%"
                         )
                     )
-                    .collect(Collectors.toList());
+                    .toList();
                 return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
             }
         };
