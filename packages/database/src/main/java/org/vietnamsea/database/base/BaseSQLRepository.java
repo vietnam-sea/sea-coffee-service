@@ -1,4 +1,4 @@
-package org.vietnamsea.repository.base;
+package org.vietnamsea.database.base;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,12 +12,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
-import org.vietnamsea.database.base.BaseEntity;
 
 import jakarta.persistence.criteria.Predicate;
 
 @NoRepositoryBean
-public interface BaseRepository <T extends BaseEntity, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+public interface BaseSQLRepository <T extends BaseSQLEntity, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
 
     default Page<T> searchByParameterDefault(Map<String, String> param, Pageable pageable) {
         Specification<T> spec = (root, query, criteriaBuilder) -> {

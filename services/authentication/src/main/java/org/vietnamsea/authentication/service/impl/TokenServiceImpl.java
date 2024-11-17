@@ -20,7 +20,6 @@ public class TokenServiceImpl extends GrpcTokenServiceImplBase {
     @Override
     public void verifyToken(TokenRequest request, StreamObserver<TokenValidationResponse> responseObserver) {
         UserClaims userClaims = null;
-        
         switch (request.getType()) {
             case ACCESS_TOKEN:
                 userClaims = jwtService.getUserClaimsFromJwt(request.getToken(), JwtTokenType.ACCESS_TOKEN);

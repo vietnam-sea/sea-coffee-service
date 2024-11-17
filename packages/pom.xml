@@ -20,7 +20,6 @@
 
 	<modules>
 		<module>database</module>
-		<module>repository</module>
 		<module>util</module>
 		<module>dto</module>
 	</modules>

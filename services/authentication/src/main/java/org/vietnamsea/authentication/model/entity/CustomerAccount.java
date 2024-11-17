@@ -1,33 +1,38 @@
 package org.vietnamsea.authentication.model.entity;
 
-import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Field.Write;
+import org.vietnamsea.database.base.BaseNoSQLEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Document("customer_accounts")
-@Data
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
-public class CustomerAccount {
-    @Id
-    private BigDecimal id;
+@Document(collection = "customer_accounts")
+public class CustomerAccount extends BaseNoSQLEntity {
     @Indexed(unique = true)
     private String username;
     @Field(name = "hash_password", write = Write.ALWAYS)
     private String hashPassword;
+    @Field(name = "avatars")
+    private List<String> avatars;
+    @Field(name = "roles", write = Write.ALWAYS)
+    private List<String> roles;
+    private String googleId;
     @Field(name = "active")
     private boolean isActive;
     @Field(name = "verify")
     private boolean isVerified;
-    @Field(name = "created_date")
-    private Date createdDate;
-    @Field(name = "updated_date")
-    private Date updatedDate;
 }
