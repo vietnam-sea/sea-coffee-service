@@ -1,18 +1,13 @@
 package org.vietnamsea.authentication.model.entity;
 
-import java.util.List;
-
+import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Field.Write;
 import org.vietnamsea.database.base.BaseNoSQLEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -20,19 +15,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Document(collection = "customer_accounts")
-public class CustomerAccount extends BaseNoSQLEntity {
-    @Indexed(unique = true)
-    @Field(name = "username", write = Write.ALWAYS)
-    private String username;
-    @Field(name = "hash_password", write = Write.ALWAYS)
-    private String hashPassword;
+@Document(collection = "customer_profile")
+public class CustomerEntity extends BaseNoSQLEntity {
+    @Field(name = "first_name")
+    private String firstName;
+    @Field(name = "last_name")
+    private String lastName;
+    @Field(name = "email")
+    private String email;
     @Field(name = "avatars")
     private List<String> avatars;
     @Field(name = "roles", write = Write.ALWAYS)
     private List<String> roles;
-    @Field(name = "google_id")
-    private String googleId;
     @Field(name = "is_active", write = Write.ALWAYS)
     private boolean isActive;
     @Field(name = "is_verified", write = Write.ALWAYS)

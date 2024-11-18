@@ -71,3 +71,5 @@ buildNumber.properties
 /dataSources.local.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/maven,java,git
+
+.idea/

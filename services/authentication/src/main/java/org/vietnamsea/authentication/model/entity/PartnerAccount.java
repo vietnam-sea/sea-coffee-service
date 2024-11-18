@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,11 +31,9 @@ public class PartnerAccount extends BaseNoSQLEntity{
     @Field(name = "description")
     private String description;
     @Field(name = "verification_documents")
-    private String verificationDocuments;
+    private List<String> verificationDocuments;
     @Field(name =  "contact")
     private ContactInfo contactInfo;
-    @Field(name = "services")
-    private List<Service> services;
     @Field(name = "is_active")
     private boolean isActive;
     @Field(name = "is_looked")
@@ -48,13 +45,5 @@ public class PartnerAccount extends BaseNoSQLEntity{
     public static class ContactInfo {
         private List<String> phone;
         private List<String> website;
-    }
-
-    @Data
-    public static class Service {
-        private String serviceId;
-        private String name;
-        private String description;
-        private double price;
     }
 }
