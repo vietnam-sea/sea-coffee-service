@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,6 +73,16 @@ public class JwtServiceImpl implements JwtService {
         @SuppressWarnings("unchecked")
         Map<String, Object> userClaimsMap = (Map<String, Object>) claims.get("user");
         return convertMapToUserClaims(userClaimsMap);
+    }
+
+    @Override
+    public Cookie cookieWarpToken(String token, JwtTokenType tokenType) {
+        var cookie = new Cookie(tokenType.toString(), token);
+        cookie.setMaxAge(tokenType == JwtTokenType.ACCESS_TOKEN ? jwtConfig.getJwtExpiration(): jwtConfig.getJwtRefreshExpiration());
+        cookie.setSecure(true);
+        cookie.setHttpOnly(false);
+        cookie.setPath("/");
+        return cookie;
     }
 
     private UserClaims convertMapToUserClaims(Map<String, Object> map) {
