@@ -18,7 +18,6 @@
     <packaging>pom</packaging>
 
 	<modules>
-		<module>database</module>
 		<module>common</module>
 		<module>provider</module>
 	</modules>

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.vietnamsea.common.model.dto.request.QueryFieldWrapper;
 import org.vietnamsea.common.model.dto.request.QueryWrapper;
 import org.vietnamsea.common.model.dto.response.PaginationWrapper;
@@ -24,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@NoRepositoryBean
 public interface BaseJpaRepository <T, ID extends Serializable> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
     default Specification<T> queryAnySpecification(QueryWrapper queryWrapper) {
         return queryAnySpecification(queryWrapper.search());

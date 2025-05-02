@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.vietnamsea.authentication.service.impl.CustomerUserDetailServiceImpl;
-import org.vietnamsea.authentication.service.impl.PartnerUserDetailServiceImpl;
 
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ import java.util.Optional;
 public class AuthenticationProviderConfig implements AuthenticationProvider {
     private final PasswordEncoder passwordEncoder;
     private final CustomerUserDetailServiceImpl customerUserDetailService;
-    private final PartnerUserDetailServiceImpl partnerUserDetailService;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         var username = authentication.getName();
@@ -27,16 +25,6 @@ public class AuthenticationProviderConfig implements AuthenticationProvider {
         Optional<UserDetails> userDetails = Optional.empty();
         if(username.startsWith("customer_")) {
             var user = customerUserDetailService.loadUserByUsername(username);
-            if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-                userDetails = Optional.of(user);
-            }
-        }else if (username.startsWith("partner_")) {
-            var user = partnerUserDetailService.loadUserByUsername(username);
-            if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-                userDetails = Optional.of(user);
-            }
-        } else if (username.startsWith("system_")) {
-            var user = partnerUserDetailService.loadUserByUsername(username);
             if (user != null && passwordEncoder.matches(password, user.getPassword())) {
                 userDetails = Optional.of(user);
             }
