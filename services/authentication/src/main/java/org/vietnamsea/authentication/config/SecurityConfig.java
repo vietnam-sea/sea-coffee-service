@@ -11,11 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.vietnamsea.authentication.security.CustomAuthenticationEntryPoint;
-import org.vietnamsea.authentication.security.CustomerJwtAuthenticationFilter;
-import org.vietnamsea.authentication.security.PartnerJwtAuthenticationFilter;
-import org.vietnamsea.authentication.security.SystemJwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,9 +20,6 @@ import org.vietnamsea.authentication.security.SystemJwtAuthenticationFilter;
 public class SecurityConfig {
     @Qualifier("customAuthenticationEntryPoint")
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final CustomerJwtAuthenticationFilter customerJwtAuthenticationFilter;
-    private final PartnerJwtAuthenticationFilter partnerJwtAuthenticationFilter;
-    private final SystemJwtAuthenticationFilter systemJwtAuthenticationFilter;
     @Bean
     @Order(1)
     SecurityFilterChain authenticationFilterChain (HttpSecurity http) throws Exception {
@@ -40,10 +33,7 @@ public class SecurityConfig {
                 }).exceptionHandling(exception -> {
                     exception.authenticationEntryPoint(customAuthenticationEntryPoint);
                 })
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(this.customerJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(this.partnerJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(this.systemJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 }

@@ -1,0 +1,82 @@
+name: VNS Docker Compose Build
+
+services:
+  account-service:
+    build:
+      context: ..
+      dockerfile: ../services/account/Dockerfile
+      labels:
+        - org.vns.service=account
+      tags:
+        - ${DOCKER_USER}/vns-account-service:${TAGS}
+        - ${DOCKER_USER}/vns-account-service:latest
+
+  authentication-service:
+    build:
+      context: ..
+      dockerfile: ../services/authentication/Dockerfile
+      labels:
+        - org.vns.service=authentication
+      tags:
+        - ${DOCKER_USER}/vns-authentication-service:${TAGS}
+        - ${DOCKER_USER}/vns-authentication-service:latest
+
+  booking-payment-service:
+    build:
+      context: ..
+      dockerfile: ../services/booking-payment/Dockerfile
+      labels:
+        - org.vns.service=booking-payment
+      tags:
+        - ${DOCKER_USER}/vns-booking-payment-service:${TAGS}
+        - ${DOCKER_USER}/vns-booking-payment-service:latest
+
+  feedback-notification-service:
+    build:
+      context: ..
+      dockerfile: ../services/feedback-notification/Dockerfile
+      labels:
+        - org.vns.service=feedback-notification
+      tags:
+        - ${DOCKER_USER}/vns-feedback-notification-service:${TAGS}
+        - ${DOCKER_USER}/vns-feedback-notification-service:latest
+
+  gateway-service:
+    build:
+      context: ..
+      dockerfile: ../services/gateway/Dockerfile
+      labels:
+        - org.vns.service=gateway
+      tags:
+        - ${DOCKER_USER}/vns-gateway-service:${TAGS}
+        - ${DOCKER_USER}/vns-gateway-service:latest
+
+  user-service:
+    build:
+      context: ..
+      dockerfile: ../services/user/Dockerfile
+      labels:
+        - org.vns.service=user
+      tags:
+        - ${DOCKER_USER}/vns-user-service:${TAGS}
+        - ${DOCKER_USER}/vns-user-service:latest
+
+  partner-service:
+    build:
+      context: ..
+      dockerfile: ../services/partner/Dockerfile
+      labels:
+        - org.vns.service=partner
+      tags:
+        - ${DOCKER_USER}/vns-partner-service:${TAGS}
+        - ${DOCKER_USER}/vns-partner-service:latest
+
+  voucher-promotion-service:
+    build:
+      context: ..
+      dockerfile: ../services/voucher-promotion/Dockerfile
+      labels:
+        - org.vns.service=voucher-promotion
+      tags:
+        - ${DOCKER_USER}/vns-voucher-promotion-service:${TAGS}
+        - ${DOCKER_USER}/vns-voucher-promotion-service:latest

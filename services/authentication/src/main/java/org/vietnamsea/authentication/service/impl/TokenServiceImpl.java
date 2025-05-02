@@ -1,5 +1,8 @@
 package org.vietnamsea.authentication.service.impl;
 
+import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
+import org.springframework.grpc.server.service.GrpcService;
 import org.vietnamsea.authentication.model.constant.JwtTokenType;
 import org.vietnamsea.authentication.model.other.UserClaims;
 import org.vietnamsea.authentication.service.JwtService;
@@ -7,10 +10,6 @@ import org.vietnamsea.base_proto.GrpcTokenServiceGrpc.GrpcTokenServiceImplBase;
 import org.vietnamsea.base_proto.TokenRequest;
 import org.vietnamsea.base_proto.TokenValidationResponse;
 import org.vietnamsea.base_proto.UserTokenResponse;
-
-import io.grpc.stub.StreamObserver;
-import lombok.RequiredArgsConstructor;
-import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
 @RequiredArgsConstructor

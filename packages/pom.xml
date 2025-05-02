@@ -10,7 +10,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-	<groupId>org.vietnamsea</groupId>
 	<artifactId>packages</artifactId>
 	<version>0.0.0</version>
 	<name>packages</name>
@@ -20,8 +19,7 @@
 
 	<modules>
 		<module>database</module>
-		<module>util</module>
-		<module>dto</module>
+		<module>common</module>
+		<module>provider</module>
 	</modules>
-    
 </project>
