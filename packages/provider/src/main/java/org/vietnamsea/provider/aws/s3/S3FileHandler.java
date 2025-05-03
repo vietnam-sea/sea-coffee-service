@@ -1,9 +1,8 @@
 package org.vietnamsea.provider.aws.s3;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.vietnamsea.provider.aws.config.AWSConfigValue;
 import org.vietnamsea.provider.aws.model.S3FileRequest;
+import org.vietnamsea.provider.aws.model.S3FileResponse;
 import org.vietnamsea.provider.aws.util.FileUtils;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -28,13 +27,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class S3FileHandler {
+public abstract class S3FileHandler {
     private final S3Client s3Client;
     private final S3AsyncClient s3AsyncClient;
     private final AWSConfigValue awsConfig;
-    public String upload(S3FileRequest file) {
+
+    public S3FileHandler(S3Client s3Client, S3AsyncClient s3AsyncClient, AWSConfigValue awsConfig) {
+        this.s3Client = s3Client;
+        this.s3AsyncClient = s3AsyncClient;
+        this.awsConfig = awsConfig;
+    }
+
+    public S3FileResponse upload(S3FileRequest file) {
         if(!FileUtils.verifyFile(file.getFile())) {
             throw new IllegalArgumentException("Invalid file");
         }
@@ -45,13 +49,17 @@ public class S3FileHandler {
                     .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(new ByteArrayInputStream(file.getFile()), file.getFile().length));
-            return generatePublicUrl(file.getFileName());
+            return S3FileResponse.builder()
+                    .fileName(file.getFileName())
+                    .fileUrl(generatePublicUrl(file.getFileName()))
+                    .file(file.getFile())
+                    .build();
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage());
         }
     }
 
-    public String upload(File file) {
+    public S3FileResponse upload(File file) {
         try {
             var fileName = FileUtils.generateFileName(file.getName());
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -60,7 +68,10 @@ public class S3FileHandler {
                     .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromFile(file));
-            return generatePublicUrl(fileName);
+            return S3FileResponse.builder()
+                    .fileName(fileName)
+                    .fileUrl(generatePublicUrl(fileName))
+                    .build();
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage());
         }
@@ -80,7 +91,7 @@ public class S3FileHandler {
         }
     }
 
-    public Set<String> uploadBulkFile(List<S3FileRequest> files) {
+    public Set<S3FileResponse> uploadBulkFile(List<S3FileRequest> files) {
         try (ExecutorService executorService = Executors.newFixedThreadPool(10)){
             return files.stream()
                     .map(file -> uploadFileAsync(file, executorService)
@@ -99,7 +110,7 @@ public class S3FileHandler {
                         .key(fileName))
                 .toString();
     }
-    private CompletableFuture<String> uploadFileAsync(S3FileRequest file, ExecutorService executorService) {
+    private CompletableFuture<S3FileResponse> uploadFileAsync(S3FileRequest file, ExecutorService executorService) {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(awsConfig.getBucket())
@@ -108,9 +119,13 @@ public class S3FileHandler {
                     .build();
             return s3AsyncClient.putObject(putObjectRequest,
                             AsyncRequestBody.fromInputStream(new ByteArrayInputStream(file.getFile()), (long) file.getFile().length, executorService))
-                    .thenApply(response -> generatePublicUrl(file.getFileName()));
+                    .thenApply(response -> S3FileResponse.builder()
+                                .file(file.getFile())
+                                .fileName(file.getFileName())
+                                .fileUrl(generatePublicUrl(file.getFileName()))
+                                .build());
         } catch (Exception ex) {
-            CompletableFuture<String> failedFuture = new CompletableFuture<>();
+            CompletableFuture<S3FileResponse> failedFuture = new CompletableFuture<>();
             failedFuture.completeExceptionally(new RuntimeException("Failed to upload file: " + file.getFileName(), ex));
             return failedFuture;
         }
