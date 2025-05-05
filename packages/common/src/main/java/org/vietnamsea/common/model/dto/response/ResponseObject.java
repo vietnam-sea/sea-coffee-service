@@ -2,25 +2,26 @@ package org.vietnamsea.common.model.dto.response;
 
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
 public class ResponseObject<T> {
     private final T content;
-    private final String message;
+    private final List<String> messages;
     private final String code;
     private final boolean success;
     private final PaginationObject pagination;
     private ResponseObject(Builder<T> builder) {
         this.content = builder.content;
-        this.message = builder.message;
+        this.messages = builder.messages;
         this.code = builder.code;
         this.success = builder.success;
         this.pagination = builder.pagination;
     }
     public static class Builder<T> {
         private T content;
-        private String message;
+        private List<String> messages;
         private String code;
         private boolean success;
         private PaginationObject pagination;
@@ -29,8 +30,12 @@ public class ResponseObject<T> {
             this.content = content;
             return this;
         }
-        public Builder<T> message(String message) {
-            this.message = message;
+        public Builder<T> messages(List<String> messages) {
+            this.messages = messages;
+            return this;
+        }
+        public Builder<T> messages(String... messages) {
+            this.messages = Arrays.asList(messages);
             return this;
         }
         public Builder<T> code(String code) {
