@@ -1,5 +1,6 @@
 package org.vietnamsea.authentication.service;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,9 +9,18 @@ import org.vietnamsea.authentication.model.constant.JwtTokenType;
 import org.vietnamsea.authentication.model.other.UserClaims;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Optional;
 
 public interface JwtService {
+    String generateToken(Authentication authentication, JwtTokenType tokenType);
+
+    Claims generateClaims(UserClaims claimInfo);
+
+    String generateToken(String username, List<String> role, JwtTokenType tokenType);
+
+    String generateToken(UserClaims userClaims);
+
     Optional<UserClaims> getUserClaimsFromJwt(String token, JwtTokenType tokenType);
 
     Optional<UserClaims> getUserClaimsFromJwt(EnumMap<JwtTokenType, Cookie> cookieEnumMap);

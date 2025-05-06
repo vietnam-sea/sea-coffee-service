@@ -15,7 +15,7 @@ import org.vietnamsea.common.model.entity.BaseMongoEntity;
 @AllArgsConstructor
 @Builder
 @Document(collection = "customer_accounts")
-public class CustomerAccountEntity extends BaseMongoEntity {
+public class AccountEntity extends BaseMongoEntity {
     @Field(name = "username", targetType = FieldType.STRING)
     private String username;
     @Field(name = "email", targetType = FieldType.STRING)
@@ -32,8 +32,8 @@ public class CustomerAccountEntity extends BaseMongoEntity {
     private boolean locked;
     @Field(name = "using_2fa", value = "false", write = Field.Write.NON_NULL, targetType = FieldType.BOOLEAN)
     private boolean using2FA;
-
-    public CustomerAccountEntity() {
-        super();
-    }
+    @Field(name = "customer_profile")
+    private CustomerProfileEntity customerProfile;
+    @Field(name = "partner_profile")
+    private PartnerProfileEntity partnerProfile;
 }

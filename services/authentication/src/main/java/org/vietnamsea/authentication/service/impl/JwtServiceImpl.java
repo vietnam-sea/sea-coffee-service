@@ -32,17 +32,19 @@ public class JwtServiceImpl implements JwtService {
     private final JwtConfig jwtTokenConfig;
     @Value(value = "${base-urls.root-host}")
     private String hostUrl;
+    @Override
     public String generateToken(Authentication authentication, JwtTokenType tokenType) {
         UserDetails user = (UserDetails) authentication.getPrincipal();
         var roles = user.getAuthorities().toArray(new GrantedAuthority[0]);
         return generateToken(user.getUsername(), Arrays.stream(roles).map(GrantedAuthority::getAuthority).toList(),tokenType);
     }
-
-    public Claims generateClaims (UserClaims claimInfo) {
+    @Override
+    public Claims generateClaims(UserClaims claimInfo) {
         Claims claims = Jwts.claims();
         claims.put("user", claimInfo);
         return claims;
     }
+    @Override
     public String generateToken(String username, List<String> role, JwtTokenType tokenType) {
         Date currentDate = new Date(System.currentTimeMillis());
         Date expiryDate = null;
@@ -50,6 +52,8 @@ public class JwtServiceImpl implements JwtService {
             expiryDate = new Date(currentDate.getTime() + jwtTokenConfig.getJwtExpiration());
         }else if (tokenType == JwtTokenType.REFRESH_TOKEN) {
             expiryDate = new Date(currentDate.getTime() + jwtTokenConfig.getJwtRefreshExpiration());
+        }else if (tokenType == JwtTokenType.TWO_FA_TOKEN) {
+            expiryDate = new Date(currentDate.getTime() + jwtTokenConfig.getJwtTwo2FATokenExpiration());
         }
         return Jwts.builder()
                 .setSubject(username)
@@ -63,12 +67,17 @@ public class JwtServiceImpl implements JwtService {
                 .signWith(getSigningKey(tokenType))
                 .compact();
     }
-
+    @Override
     public String generateToken(UserClaims userClaims) {
         return generateToken(userClaims.getUsername(),userClaims.getRoles(),userClaims.getTokenType());
     }
     private SecretKey getSigningKey(JwtTokenType tokenType) {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(tokenType == JwtTokenType.ACCESS_TOKEN ? jwtTokenConfig.getJwtSecret() : jwtTokenConfig.getJwtRefreshSecret()));
+        String secretKey = switch (tokenType) {
+            case ACCESS_TOKEN -> jwtTokenConfig.getJwtSecret();
+            case REFRESH_TOKEN -> jwtTokenConfig.getJwtRefreshSecret();
+            case TWO_FA_TOKEN -> jwtTokenConfig.getJwtTwo2FASecret();
+        };
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
     @Override
     public Optional<UserClaims> getUserClaimsFromJwt(String token, JwtTokenType tokenType) {
@@ -94,11 +103,17 @@ public class JwtServiceImpl implements JwtService {
     }
     @Override
     public Cookie tokenCookieWarp(String token, JwtTokenType tokenType) {
+        long jwtEx = switch (tokenType) {
+            case ACCESS_TOKEN -> jwtTokenConfig.getJwtExpiration();
+            case REFRESH_TOKEN -> jwtTokenConfig.getJwtRefreshExpiration();
+            case TWO_FA_TOKEN -> jwtTokenConfig.getJwtTwo2FATokenExpiration();
+        };
+
         var cookie = new Cookie(tokenType.toString(), token);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
-        cookie.setMaxAge((int) (tokenType == JwtTokenType.ACCESS_TOKEN ? jwtTokenConfig.getJwtExpiration() : jwtTokenConfig.getJwtRefreshExpiration()));
+        cookie.setMaxAge((int) (jwtEx));
         cookie.setAttribute("SameSite", "None");
         if (!hostUrl.isEmpty()) {
             cookie.setDomain(hostUrl);

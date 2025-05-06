@@ -2,18 +2,24 @@ package org.vietnamsea.authentication.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.vietnamsea.authentication.model.entity.CustomerAccountEntity;
+import org.vietnamsea.authentication.model.entity.AccountEntity;
 import org.vietnamsea.authentication.repository.CustomerAccountRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class AuthUtils {
     private final CustomerAccountRepository customerAccountRepository;
-    public CustomerAccountEntity getUserAccountFromAuthentication() {
+    public AccountEntity getUserAccountFromAuthentication() {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null) { throw new AuthenticationException("Authentication required") {}; }
@@ -23,7 +29,7 @@ public class AuthUtils {
             throw new AuthenticationException("This user isn't authentication, please login again") {};
         }
     }
-    public Optional<CustomerAccountEntity> getCurrentUserAccount() {
+    public Optional<AccountEntity> getCurrentUserAccount() {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null) return Optional.empty();
@@ -32,5 +38,20 @@ public class AuthUtils {
         } catch (Exception ex) {
             return Optional.empty();
         }
+    }
+
+    public static Collection<GrantedAuthority> convertRoleToAuthority (AccountEntity account) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if(account.getCustomerProfile() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+        }
+        if (account.getPartnerProfile() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PARTNER"));
+        }
+        return authorities;
+    }
+
+    public static List<String> convertAccountToRole (AccountEntity account) {
+        return convertRoleToAuthority(account).stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 }

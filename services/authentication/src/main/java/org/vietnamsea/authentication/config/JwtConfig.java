@@ -20,4 +20,6 @@ public class JwtConfig {
 
     @Value("${refresh-token.max-age}")
     private long jwtRefreshExpiration;
+    private String jwtTwo2FASecret;
+    private long jwtTwo2FATokenExpiration;
 }
