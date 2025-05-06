@@ -34,6 +34,6 @@ public class CustomerAccountEntity extends BaseMongoEntity {
     private boolean using2FA;
 
     public CustomerAccountEntity() {
-
+        super();
     }
 }

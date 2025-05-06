@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.vietnamsea.authentication.model.dto.request.CustomerInternalAuthenticationRequest;
+import org.vietnamsea.authentication.model.dto.request.AuthenticationRequest;
 import org.vietnamsea.authentication.model.dto.request.ExternalCustomerAccountAuthRequest;
 import org.vietnamsea.authentication.service.AuthService;
 
@@ -18,7 +18,7 @@ public class AuthenticationController {
     private final AuthService authService;
 
     @PostMapping("customer/internal")
-    public ResponseEntity<?> customerAuthenticationInternal(@Valid @RequestBody CustomerInternalAuthenticationRequest request) {
+    public ResponseEntity<?> customerAuthenticationInternal(@Valid @RequestBody AuthenticationRequest request) {
         return null;
     }
     @PostMapping("customer/external")

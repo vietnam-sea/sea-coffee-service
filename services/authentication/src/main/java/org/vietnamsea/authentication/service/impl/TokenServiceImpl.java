@@ -21,10 +21,10 @@ public class TokenServiceImpl extends GrpcTokenServiceImplBase {
         UserClaims userClaims = null;
         switch (request.getType()) {
             case ACCESS_TOKEN:
-                userClaims = jwtService.getUserClaimsFromJwt(request.getToken(), JwtTokenType.ACCESS_TOKEN);
+                userClaims = jwtService.getUserClaimsFromJwt(request.getToken(), JwtTokenType.ACCESS_TOKEN).orElse(null);
                 break;
             case REFRESH_TOKEN:
-                userClaims = jwtService.getUserClaimsFromJwt(request.getToken(), JwtTokenType.REFRESH_TOKEN);
+                userClaims = jwtService.getUserClaimsFromJwt(request.getToken(), JwtTokenType.REFRESH_TOKEN).orElse(null);
                 break;
             default:
                 responseObserver.onNext(TokenValidationResponse.newBuilder()
@@ -37,7 +37,7 @@ public class TokenServiceImpl extends GrpcTokenServiceImplBase {
         TokenValidationResponse tokenRpcResponse = TokenValidationResponse.newBuilder()
         .setIsValid(true)
         .setUserInfo(UserTokenResponse.newBuilder()
-            .setRole(userClaims.getRole())
+                .addAllRoles(userClaims.getRoles())
             .setUsername(userClaims.getUsername())
             .setIsActive(true)
             .setIsVerified(true)

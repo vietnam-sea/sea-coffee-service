@@ -1,21 +1,23 @@
 package org.vietnamsea.authentication.config;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
-import lombok.Data;
 
 @Component
 @Data
 @Configuration
 public class JwtConfig {
-    @Value("${token.jwt.access-token.ex-time}")
-    private int jwtExpiration;
-    @Value("${token.jwt.refresh-token.ex-time}")
-    private int jwtRefreshExpiration;
-    @Value("${token.jwt.access-token.key}")
-    private String jwtAccessTokenKey;
-    @Value("${token.jwt.refresh-token.key}")
-    private String jwtRefreshTokenKey;
+    @Value("${access-token.secret-key}")
+    private String jwtSecret;
+
+    @Value("${access-token.max-age}")
+    private long jwtExpiration;
+
+    @Value("${refresh-token.secret-key}")
+    private String jwtRefreshSecret;
+
+    @Value("${refresh-token.max-age}")
+    private long jwtRefreshExpiration;
 }
