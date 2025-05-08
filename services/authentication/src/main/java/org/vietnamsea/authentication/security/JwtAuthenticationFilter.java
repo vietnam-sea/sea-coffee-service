@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vietnamsea.authentication.model.constant.JwtTokenType;
 import org.vietnamsea.authentication.service.JwtService;
-import org.vietnamsea.authentication.service.impl.CustomerUserDetailServiceImpl;
+import org.vietnamsea.authentication.service.impl.UserDetailServiceImpl;
 import org.vietnamsea.authentication.util.CookieUtils;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.EnumMap;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final CustomerUserDetailServiceImpl userDetailService;
+    private final UserDetailServiceImpl userDetailService;
     private final JwtService jwtService;
 
     @Override

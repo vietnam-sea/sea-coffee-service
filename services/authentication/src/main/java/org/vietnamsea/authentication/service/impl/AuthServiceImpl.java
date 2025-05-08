@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.vietnamsea.authentication.model.constant.JwtTokenType;
 import org.vietnamsea.authentication.model.dto.request.AuthenticationRequest;
 import org.vietnamsea.authentication.model.dto.response.AuthResponse;
-import org.vietnamsea.authentication.repository.CustomerAccountRepository;
+import org.vietnamsea.authentication.repository.AccountRepository;
 import org.vietnamsea.authentication.service.AuthService;
 import org.vietnamsea.authentication.service.JwtService;
 import org.vietnamsea.authentication.util.AuthUtils;
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final AuthUtils authUtils;
-    private final CustomerAccountRepository customerAccountRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public AuthResponse localAuthentication(AuthenticationRequest authenticationRequest) {
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
         callback.accept(cookieList);
         return result;
     }
-
+    
     @Override
     public BufferedImage register2FaAuthentication(int width, int height) {
         var account = authUtils.getUserAccountFromAuthentication();
@@ -87,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         var account = authUtils.getUserAccountFromAuthentication();
         if (!account.isUsing2FA()) {
             account.setUsing2FA(true);
-            customerAccountRepository.save(account);
+            accountRepository.save(account);
         }
         var totpSystem = TokenUtils.getTOTPCode(account.getSecret());
         if (!totpSystem.equals(totp)) {

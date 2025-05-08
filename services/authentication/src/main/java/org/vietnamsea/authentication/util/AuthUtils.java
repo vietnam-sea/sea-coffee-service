@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.vietnamsea.authentication.model.entity.AccountEntity;
-import org.vietnamsea.authentication.repository.CustomerAccountRepository;
+import org.vietnamsea.authentication.repository.AccountRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class AuthUtils {
-    private final CustomerAccountRepository customerAccountRepository;
+    private final AccountRepository accountRepository;
     public AccountEntity getUserAccountFromAuthentication() {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null) { throw new AuthenticationException("Authentication required") {}; }
             String username = auth.getName();
-            return customerAccountRepository.findByUsername(username).orElseThrow();
+            return accountRepository.findByUsername(username).orElseThrow();
         } catch (Exception ex) {
             throw new AuthenticationException("This user isn't authentication, please login again") {};
         }
@@ -34,7 +34,7 @@ public class AuthUtils {
             var auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null) return Optional.empty();
             String username = auth.getName();
-            return customerAccountRepository.findByUsername(username);
+            return accountRepository.findByUsername(username);
         } catch (Exception ex) {
             return Optional.empty();
         }

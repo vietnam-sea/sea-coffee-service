@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
@@ -17,8 +18,10 @@ import org.vietnamsea.common.model.entity.BaseMongoEntity;
 @Document(collection = "customer_accounts")
 public class AccountEntity extends BaseMongoEntity {
     @Field(name = "username", targetType = FieldType.STRING)
+    @Indexed(unique = true)
     private String username;
     @Field(name = "email", targetType = FieldType.STRING)
+    @Indexed(unique = true)
     private String email;
     @Field(name = "auth_type", targetType = FieldType.STRING)
     private AuthType authType;
@@ -36,4 +39,6 @@ public class AccountEntity extends BaseMongoEntity {
     private CustomerProfileEntity customerProfile;
     @Field(name = "partner_profile")
     private PartnerProfileEntity partnerProfile;
+    @Field(name = "system_profile")
+    private SystemProfileEntity systemProfile;
 }
